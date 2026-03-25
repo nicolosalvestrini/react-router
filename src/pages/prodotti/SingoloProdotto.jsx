@@ -6,6 +6,7 @@ export default function SingoloProdotto() {
   const [prodotto, setProdotto] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   
 
   useEffect(() => {
@@ -13,11 +14,23 @@ export default function SingoloProdotto() {
       .get(`https://fakestoreapi.com/products/${id}`)
       .then((res) => {
         setProdotto(res.data);
+        setLoading(false);
       })
       .catch(() => {
         navigate("/Pageerror");
       });
   }, [id, navigate]);
+
+   if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: "80vh" }}>
+        <div className="spinner-border text-secondary" role="status">
+          <span className="visually-hidden">Caricamento...</span>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="d-flex flex-wrap gap-3 justify-content-center">
       <div key={prodotto.id} className="card" style={{ width: "18rem" }}>
