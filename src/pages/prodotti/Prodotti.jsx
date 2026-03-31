@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { useBudget } from "../../Context/BudgetContext";
 
 export default function Prodotti() {
   const [prodotti, setProdotti] = useState([]);
+  const { budgetMode } = useBudget();
 
   useEffect(() => {
     axios
@@ -16,11 +18,16 @@ export default function Prodotti() {
       });
   }, []);
 
+  const prodottiFiltrati = budgetMode
+    ? prodotti.filter((p) => p.price <= 50)
+    : prodotti;
+
   return (
     <div className="container">
       <h2 className="text-center text-black">Prodotti</h2>
+
       <div className="d-flex flex-wrap gap-3 justify-content-center">
-        {prodotti.map((p) => (
+        {prodottiFiltrati.map((p) => (
           <div key={p.id} className="card" style={{ width: "18rem" }}>
             <img
               src={p.image}
